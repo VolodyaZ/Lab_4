@@ -1,0 +1,9 @@
+SHORTNAME a
+A;a;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;1;a;a;a;a;a;a;
+INDUSTRY a
+A;a;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;1;a;a;a;a;a;a;
+B;b;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;1;a;a;a;a;a;a;
+C;c;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;1;a;a;a;a;a;a;
+D;d;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;1;a;a;a;a;a;a;
+E;e;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;1;a;a;a;a;a;a;
+SHORTNAME nepv
