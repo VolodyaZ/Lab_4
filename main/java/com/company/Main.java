@@ -13,9 +13,18 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        String inputFile = args[0];
-        String outputFile = args[1];
-        String logFile = args[2];
+        String inputFile;
+        String outputFile;
+        String logFile;
+        if (args.length < 3) {
+            inputFile = "in.txt";
+            outputFile = "out.txt";
+            logFile = "log.txt";
+        } else {
+            inputFile = args[0];
+            outputFile = args[1];
+            logFile = args[2];
+        }
         try {
             processQueries(inputFile, outputFile, logFile);
         } catch (Exception ex) {
@@ -23,7 +32,7 @@ public class Main {
         }
     }
 
-    public static void processQueries(String inputFile, String outputFile, String logFile) {
+    public static void processQueries(String inputFile, String outputFile, String logFile) throws IOException {
         CompanyQueries companies = new CompanyQueries();
         //read from file
         try (Scanner scanner = new Scanner(new File(inputFile))) {
@@ -34,6 +43,7 @@ public class Main {
             System.out.println(ex.getMessage());
         }
         //process queries here
+        String query = "";
         try (Scanner scanner = new Scanner(System.in);
              BufferedWriter outputWriter = new BufferedWriter(new FileWriter(outputFile));
              BufferedWriter logWriter = new BufferedWriter(new FileWriter(logFile, true))
@@ -44,7 +54,6 @@ public class Main {
                     FOUNDATION_DATE + " Date Date, " +
                     NUMBER_OF_EMPLOYEES + " int int, " +
                     EXIT);
-            String query;
             while (!(query = scanner.next()).equals(EXIT)) {
                 List<Company> result;
                 switch (query) {
@@ -76,19 +85,32 @@ public class Main {
                         result = companies.findByNumberOfEmployees(min, max);
                         break;
                     default:
+                        scanner.nextLine();
                         System.out.println("query " + query + " not found\n");
+                        printLog(query, logWriter, true);
                         continue;
                 }
-                printLog(query, logWriter);
+                printLog(query, logWriter, false);
                 printOutput(result, query, outputWriter);
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
+            if (query.length() > 0) {
+                BufferedWriter logWriter = new BufferedWriter(new FileWriter(logFile, true));
+                printLog(query, logWriter, true);
+                logWriter.close();
+            }
         }
     }
 
-    private static void printLog(String str, BufferedWriter writer) throws IOException {
-        writer.write(str + " " + LocalDateTime.now() + '\n');
+    private static void printLog(String str, BufferedWriter writer, boolean failed) throws IOException {
+        String result;
+        if (failed) {
+            result = "failed";
+        } else {
+            result = "succeeded";
+        }
+        writer.write(str + " " + LocalDateTime.now() + "  -- " + result + '\n');
     }
 
     private static void printOutput(List<Company> result, String query, BufferedWriter writer) throws IOException {

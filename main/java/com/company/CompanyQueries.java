@@ -18,7 +18,7 @@ public class CompanyQueries {
     }
 
     public List<Company> getCompanies() {
-        return companies;
+        return new ArrayList<>(companies);
     }
 
     public List<Company> findByShortName(String shortName) {
