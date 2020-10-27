@@ -26,22 +26,23 @@ public class Main {
             logFile = args[2];
         }
         try {
-            processQueries(inputFile, outputFile, logFile);
+            CompanyQueries companies = readTable(inputFile);
+            processQueries(companies, outputFile, logFile);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    public static void processQueries(String inputFile, String outputFile, String logFile) throws IOException {
-        CompanyQueries companies = new CompanyQueries();
-        //read from file
-        try (Scanner scanner = new Scanner(new File(inputFile))) {
-            while (scanner.hasNextLine()) {
-                companies.addCompany(new Company(scanner.nextLine()));
-            }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+    public static CompanyQueries readTable(String inputFile) throws Exception {
+        CompanyQueries table = new CompanyQueries();
+        Scanner scanner = new Scanner(new File(inputFile));
+        while (scanner.hasNextLine()) {
+            table.addCompany(new Company(scanner.nextLine()));
         }
+        return table;
+    }
+
+    public static void processQueries(CompanyQueries companies, String outputFile, String logFile) throws IOException {
         //process queries here
         String query = "";
         try (Scanner scanner = new Scanner(System.in);

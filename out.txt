@@ -1,7 +1,0 @@
-SHORTNAME 12
-FOUNDATION_DATE Mon Jan 01 00:00:00 MSK 1000 Wed Jan 01 00:00:00 MSK 2020
-A;a;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;1;a;a;a;a;a;a;
-B;b;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;5;a;a;a;a;a;a;
-C;c;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;15;a;a;a;a;a;a;
-D;d;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;4;a;a;a;a;a;a;
-E;e;Fri Jan 01 00:00:00 MSK 1999;a;Fri Jan 01 00:00:00 MSK 1999;25;a;a;a;a;a;a;
