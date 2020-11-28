@@ -25,9 +25,9 @@ class Company {
         }
         this.name = fields[0];
         this.shortName = fields[1];
-        this.actualizationDate = new SimpleDateFormat("dd/MM/yyyy").parse(fields[2]);
+        this.actualizationDate = new SimpleDateFormat(DateFormat.FORMAT).parse(fields[2]);
         this.address = fields[3];
-        this.foundationDate = new SimpleDateFormat("dd/MM/yyyy").parse(fields[4]);
+        this.foundationDate = new SimpleDateFormat(DateFormat.FORMAT).parse(fields[4]);
         this.employeeCount = Integer.parseInt(fields[5]);
         this.auditor = fields[6];
         this.phone = fields[7];

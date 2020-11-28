@@ -24,7 +24,7 @@ public class CompanyQueries {
     public List<Company> findByShortName(String shortName) {
         List<Company> result = new ArrayList<>();
         for (Company company : companies) {
-            if (company.getShortName().toLowerCase().compareTo(shortName.toLowerCase()) == 0) {
+            if (company.getShortName().toLowerCase().equals(shortName.toLowerCase())) {
                 result.add(company);
             }
         }

@@ -17,8 +17,8 @@ public class Main {
         String outputFile;
         String logFile;
         if (args.length < 3) {
-            inputFile = "in.txt";
-            outputFile = "out.txt";
+            inputFile = "in.csv";
+            outputFile = "out.csv";
             logFile = "log.txt";
         } else {
             inputFile = args[0];
@@ -35,9 +35,12 @@ public class Main {
 
     public static CompanyQueries readTable(String inputFile) throws Exception {
         CompanyQueries table = new CompanyQueries();
-        Scanner scanner = new Scanner(new File(inputFile));
-        while (scanner.hasNextLine()) {
-            table.addCompany(new Company(scanner.nextLine()));
+        try (Scanner scanner = new Scanner(new File(inputFile))) {
+            while (scanner.hasNextLine()) {
+                table.addCompany(new Company(scanner.nextLine()));
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
         return table;
     }
@@ -49,15 +52,24 @@ public class Main {
              BufferedWriter outputWriter = new BufferedWriter(new FileWriter(outputFile));
              BufferedWriter logWriter = new BufferedWriter(new FileWriter(logFile, true))
              ) {
-            System.out.println("Available queries: \n" + SHORTNAME + " String, " +
-                    INDUSTRY + " String, " +
-                    TYPE_OF_BUSINESS + " String, " +
-                    FOUNDATION_DATE + " Date Date, " +
-                    NUMBER_OF_EMPLOYEES + " int int, " +
-                    EXIT);
-            while (!(query = scanner.next()).equals(EXIT)) {
+            System.out.println("Available queries: \n" + Queries.SHORTNAME.getValue() + " String, " +
+                    Queries.INDUSTRY.getValue() + " String, " +
+                    Queries.TYPE_OF_BUSINESS.getValue() + " String, " +
+                    Queries.FOUNDATION_DATE.getValue() + " Date Date, " +
+                    Queries.NUMBER_OF_EMPLOYEES.getValue() + " int int, " +
+                    Queries.EXIT.getValue());
+            while (!(query = scanner.next()).equals(Queries.EXIT.getValue())) {
                 List<Company> result;
-                switch (query) {
+                Queries q;
+                try {
+                    q = Queries.valueOf(query);
+                } catch (IllegalArgumentException ex) {
+                    scanner.nextLine();
+                    System.out.println("query " + query + " not found\n");
+                    printLog(query, logWriter, true);
+                    continue;
+                }
+                switch (q) {
                     case SHORTNAME:
                         String sName = scanner.next();
                         query += " " + sName;
@@ -74,8 +86,8 @@ public class Main {
                         result = companies.findByTypeOfBusiness(type);
                         break;
                     case FOUNDATION_DATE:
-                        Date start = new SimpleDateFormat("dd/MM/yyyy").parse(scanner.next());
-                        Date end = new SimpleDateFormat("dd/MM/yyyy").parse(scanner.next());
+                        Date start = new SimpleDateFormat(DateFormat.FORMAT).parse(scanner.next());
+                        Date end = new SimpleDateFormat(DateFormat.FORMAT).parse(scanner.next());
                         query += " " + start.toString() + " " + end.toString();
                         result = companies.findByDateOfFoundation(start, end);
                         break;
@@ -86,9 +98,6 @@ public class Main {
                         result = companies.findByNumberOfEmployees(min, max);
                         break;
                     default:
-                        scanner.nextLine();
-                        System.out.println("query " + query + " not found\n");
-                        printLog(query, logWriter, true);
                         continue;
                 }
                 printLog(query, logWriter, false);
@@ -105,12 +114,7 @@ public class Main {
     }
 
     private static void printLog(String str, BufferedWriter writer, boolean failed) throws IOException {
-        String result;
-        if (failed) {
-            result = "failed";
-        } else {
-            result = "succeeded";
-        }
+        String result = failed ? "failed" : "succeeded";
         writer.write(str + " " + LocalDateTime.now() + "  -- " + result + '\n');
     }
 
@@ -121,10 +125,29 @@ public class Main {
         }
     }
 
-    static final String SHORTNAME = "SHORTNAME";
-    static final String INDUSTRY = "INDUSTRY";
-    static final String TYPE_OF_BUSINESS = "TYPE_OF_BUSINESS";
-    static final String FOUNDATION_DATE = "FOUNDATION_DATE";
-    static final String NUMBER_OF_EMPLOYEES = "NUMBER_OF_EMPLOYEES";
-    static final String EXIT = "EXIT";
+//    static final String SHORTNAME = "SHORTNAME";
+//    static final String INDUSTRY = "INDUSTRY";
+//    static final String TYPE_OF_BUSINESS = "TYPE_OF_BUSINESS";
+//    static final String FOUNDATION_DATE = "FOUNDATION_DATE";
+//    static final String NUMBER_OF_EMPLOYEES = "NUMBER_OF_EMPLOYEES";
+//    static final String EXIT = "EXIT";
+
+    public enum Queries {
+        SHORTNAME("SHORTNAME"),
+        INDUSTRY("INDUSTRY"),
+        TYPE_OF_BUSINESS("TYPE_OF_BUSINESS"),
+        FOUNDATION_DATE("FOUNDATION_DATE"),
+        NUMBER_OF_EMPLOYEES("NUMBER_OF_EMPLOYEES"),
+        EXIT("EXIT");
+
+        private final String value;
+
+        Queries(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 }
