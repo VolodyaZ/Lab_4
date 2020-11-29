@@ -2,6 +2,8 @@ package com.company;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 public class CompanyQueries {
@@ -54,12 +56,10 @@ public class CompanyQueries {
     }
 
     public List<Company> findByDateOfFoundation(Date from, Date till) {
-        LocalDate localDateFrom = LocalDate.ofInstant(from.toInstant(), ZoneId.systemDefault()).minusDays(1);
-        LocalDate localDateTill = LocalDate.ofInstant(till.toInstant(), ZoneId.systemDefault()).plusDays(1);
         List<Company> result = new ArrayList<>();
         for (Company company : companies) {
-            if (company.getFoundationDate().after(Date.from(localDateFrom.atStartOfDay(ZoneId.systemDefault()).toInstant())) &&
-                    company.getFoundationDate().before(Date.from(localDateTill.atStartOfDay(ZoneId.systemDefault()).toInstant()))) {
+            if (company.getFoundationDate().after(Date.from(from.toInstant().minus(1, ChronoUnit.DAYS))) &&
+                    company.getFoundationDate().before(Date.from(till.toInstant().plus(1, ChronoUnit.DAYS)))) {
                 result.add(company);
             }
         }
